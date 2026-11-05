@@ -1,0 +1,12 @@
+.venv/
+venv/
+node_modules/
+.cache/
+site/
+__pycache__/
+*.py[cod]
+*.log
+/*.pdf
+*Zone.Identifier
+/docs/2-outline-old.md
+pdf-toc.css

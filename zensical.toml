@@ -1,0 +1,42 @@
+[project]
+site_name = "Maprooms Developer Documentation"
+site_url = "https://haja-sei.github.io/maprooms-docs-dev/"
+docs_dir = "docs"
+site_dir = "site"
+
+nav = [
+  { "1. Overview" = "1-overview.md" },
+  { "2. Outline" = "2-outline.md" },
+  { "3. Requirements" = "3-requirement.md" },
+  { "4. Installation" = "4-installation.md" },
+  { "5. Maproom Structure" = "5-maproom-structure.md" },
+  { "6. Create and Register a Module" = "6-module.md" },
+  { "7. Module Content" = "7-content.md" },
+  { "8. Map and Chart Rendering" = "8-control-render.md" },
+  { "9. Maintain the Maproom" = "9-maintain.md" },
+]
+
+copyright = "© 2026 · Maprooms Developer Documentation v1.0"
+extra_css = ["stylesheets/extra.css"]
+
+[project.theme]
+custom_dir = "overrides"
+logo = "img/sei_logo.png"
+
+features = [
+  "toc.follow",
+  "content.code.copy",
+  "navigation.footer",
+]
+
+[project.extra]
+generator = false
+
+[project.markdown_extensions]
+tables = {}
+toc.toc_depth = 4
+pymdownx.highlight = {}
+
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+
+  <style media="print">
+    @page {
+      margin: 18mm 18mm 22mm;
+
+      @top-center {
+        content: none;
+      }
+
+      @top-left {
+        content: "MAPROOMS";
+        width: 30%;
+        text-align: left;
+        vertical-align: middle;
+        font: 700 7.5pt Arial, sans-serif;
+        color: #315563;
+        border-bottom: 0.5pt solid #bac8ce;
+        margin-bottom: 3mm;
+      }
+
+      @top-right {
+        content: {{ page.title | striptags | tojson }};
+        width: 70%;
+        text-align: right;
+        vertical-align: middle;
+        font: 8pt Arial, sans-serif;
+        color: #61717a;
+        border-bottom: 0.5pt solid #bac8ce;
+        margin-bottom: 3mm;
+      }
+    }
+  </style>
+{% endblock %}

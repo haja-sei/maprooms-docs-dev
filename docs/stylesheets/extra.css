@@ -1,0 +1,205 @@
+@media screen and (min-width: 76.25em) {
+  /* Use the available screen width. */
+  .md-grid {
+    max-width: none;
+    margin-inline: 20px;
+  }
+
+  /* Make the right-hand table of contents narrower. */
+  .md-sidebar--secondary {
+    width: 200px;
+    flex: 0 0 200px;
+  }
+
+  .md-sidebar--secondary .md-sidebar__inner {
+    padding-inline: 0;
+  }
+
+  /* Slightly reduce the table-of-contents text size. */
+  .md-sidebar--secondary .md-nav {
+    font-size: 13px;
+  }
+}
+
+/* Center Mermaid chartflow. */
+.md-typeset .mermaid {
+  display: flex;
+  justify-content: center;
+}
+
+.md-typeset .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Center Markdown tables. */
+.md-typeset .md-typeset__table {
+  display: table;
+  margin-inline: auto;
+}
+
+.md-typeset table:not([class]) {
+  display: table;
+  width: auto;
+  margin-inline: auto;
+}
+
+/* Zebra stripes, compatible with light and dark themes. */
+.md-typeset table:not([class]) tbody tr:nth-child(even) {
+  background-color: var(--md-default-fg-color--lightest);
+}
+
+/* Highlight the row under the mouse pointer. */
+.md-typeset table:not([class]) tbody tr:hover {
+  background-color: var(--md-typeset-table-color--light);
+}
+
+/* Dark header for all Markdown tables. */
+.md-typeset table:not([class]) thead th {
+  background-color: #222222;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+@page {
+  size: A4;
+  margin: 25mm 18mm 22mm;
+
+  /* Document header and a thin dividing line. */
+  @top-center {
+    content: "MAPROOMS  /  DEVELOPER DOCUMENTATION";
+    width: 100%;
+    text-align: left;
+    vertical-align: middle;
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 1pt;
+    color: #315563;
+    border-bottom: 0.5pt solid #bac8ce;
+    margin-bottom: 6mm;
+  }
+
+  /* Copyright on the left of the footer. */
+  @bottom-left {
+    content: "© 2026 SEI";
+    width: 50%;
+    text-align: left;
+    vertical-align: middle;
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    color: #61717a;
+    border-top: 0.5pt solid #bac8ce;
+    margin-top: 5mm;
+  }
+
+  /* Page numbers on the right of the footer. */
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    width: 50%;
+    text-align: right;
+    vertical-align: middle;
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    color: #61717a;
+    border-top: 0.5pt solid #bac8ce;
+    margin-top: 5mm;
+  }
+}
+
+@media print {
+  /* Preserve background colors and zebra stripes. */
+  .md-typeset,
+  .md-typeset * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Let article content flow across printed pages. */
+  .md-main__inner {
+    display: block;
+  }
+
+  .md-content__inner {
+    margin: 0;
+  }
+
+  /* Allow wide content to wrap instead of being clipped. */
+  .md-typeset .md-typeset__scrollwrap,
+  .md-typeset .md-typeset__table {
+    display: block;
+    overflow: visible;
+  }
+
+  .md-typeset pre,
+  .md-typeset pre code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .md-typeset th,
+  .md-typeset td {
+    overflow-wrap: anywhere;
+  }
+
+  /* Repeat table headers on subsequent pages. */
+  .md-typeset thead {
+    display: table-header-group;
+  }
+
+  /* Improve page breaks around headings and illustrations. */
+  .md-typeset h1,
+  .md-typeset h2,
+  .md-typeset h3 {
+    break-after: avoid;
+  }
+
+  .md-typeset tr,
+  .md-typeset img,
+  .md-typeset .mermaid {
+    break-inside: avoid;
+  }
+}
+
+@media print {
+  /* Comfortable reading size for the document. */
+  .md-typeset {
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+
+  /* Chapter title with a strong line above it. */
+  .md-typeset h1 {
+    margin: 0 0 9mm;
+    padding-top: 5mm;
+    border-top: 2pt solid #315563;
+    font-family: Arial, sans-serif;
+    font-size: 27pt;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.4pt;
+    color: #183642;
+    break-after: avoid;
+  }
+
+  /* Consistent section headings. */
+  .md-typeset h2 {
+    margin-top: 8mm;
+    font-size: 16pt;
+    font-weight: 700;
+    color: #183642;
+    break-after: avoid;
+  }
+
+  .md-typeset h3 {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #315563;
+    break-after: avoid;
+  }
+
+  .md-typeset p {
+    orphans: 3;
+    widows: 3;
+  }
+}
