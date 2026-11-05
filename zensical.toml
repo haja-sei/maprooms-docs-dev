@@ -5,6 +5,7 @@ docs_dir = "docs"
 site_dir = "site"
 
 nav = [
+  { "Home" = "index.md" },
   { "1. Overview" = "1-overview.md" },
   { "2. Outline" = "2-outline.md" },
   { "3. Requirements" = "3-requirement.md" },
@@ -36,6 +37,8 @@ generator = false
 tables = {}
 toc.toc_depth = 4
 pymdownx.highlight = {}
+attr_list = {}
+md_in_html = {}
 
 pymdownx.superfences.custom_fences = [
   { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },

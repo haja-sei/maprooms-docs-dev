@@ -203,3 +203,134 @@
     widows: 3;
   }
 }
+
+
+
+/* Documentation homepage */
+@media screen {
+  .maprooms-home {
+    --home-background: #e3f2fd;
+    --home-border: #bfd9e8;
+    --home-text: #183642;
+
+    max-width: 1100px;
+    margin-inline: auto;
+    color: var(--home-text);
+  }
+
+  .maprooms-home .home-welcome {
+    margin-bottom: 1rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--home-border);
+    border-radius: 10px;
+    background: var(--home-background);
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .maprooms-home .home-welcome p {
+    margin: 0;
+  }
+
+  .maprooms-home .home-panel {
+    margin-bottom: 1.25rem;
+    padding: clamp(1.2rem, 3vw, 2rem);
+    border: 1px solid var(--home-border);
+    border-radius: 16px;
+    background: var(--home-background);
+    box-shadow: 0 4px 16px rgb(24 54 66 / 6%);
+  }
+
+  .maprooms-home .home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .maprooms-home h1 {
+    margin: 0 0 1rem;
+    color: var(--home-text);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  .maprooms-home h2 {
+    margin-top: 1.25rem;
+    color: var(--home-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .maprooms-home .home-introduction h2:first-child {
+    margin-top: 0;
+  }
+
+  .maprooms-home .home-logo img {
+    display: block;
+    width: 110px;
+    height: auto;
+  }
+
+  .maprooms-home .home-introduction {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(200px, 1fr);
+    align-items: start;
+    gap: 2rem;
+  }
+
+  .maprooms-home .home-figure {
+    margin: 0;
+    text-align: center;
+  }
+
+  .maprooms-home .home-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 0.4rem;
+    border: 1px solid var(--home-border);
+    border-radius: 10px;
+    background: white;
+  }
+
+  .maprooms-home .home-figure em {
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .maprooms-home .md-button {
+    margin: 0.4rem 0.4rem 0 0;
+    border-radius: 8px;
+  }
+
+  [data-md-color-scheme="slate"] .maprooms-home {
+    --home-background: #203540;
+    --home-border: #405965;
+    --home-text: #e5eef3;
+  }
+}
+
+/* Stack the content on smaller screens. */
+@media screen and (max-width: 60em) {
+  .maprooms-home .home-hero,
+  .maprooms-home .home-introduction {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .maprooms-home .home-logo {
+    grid-row: 1;
+  }
+
+  .maprooms-home .home-logo img {
+    width: 80px;
+  }
+
+  .maprooms-home .home-figure {
+    width: min(100%, 340px);
+    margin-inline: auto;
+  }
+}
