@@ -22,7 +22,7 @@ Build, configure, and maintain climate information services.
 A practical guide to working with the Python-based Maprooms application,
 from your first installation to developing and maintaining modules.
 
-[Get started](3-requirement.md){ .md-button .md-button--primary }
+[Get started](1-overview.md){ .md-button .md-button--primary }
 [Explore the guide](2-outline.md){ .md-button }
 
 </div>
@@ -67,9 +67,9 @@ navigation sidebar.
 
 <div class="home-figure" markdown>
 
-![Countries and regions where ENACTS has been implemented or is being implemented.](img/Countries-and-regions-where-ENACTS-has-been-implemented-or-is-in-the-process-of-being.png)
+![Logo ENACTS Maproom.](img/logo-maproom.png)
 
-*Countries and regions where ENACTS has been implemented.*
+<!-- *Countries and regions where ENACTS has been implemented.* -->
 
 </div>
 

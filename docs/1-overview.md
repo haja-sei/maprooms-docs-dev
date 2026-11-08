@@ -14,6 +14,7 @@ Working with large datasets can make accessing climate information challenging, 
 For developers, the Python implementation provides a modular structure that connects calculation scripts, configuration files, Jinja templates, and JavaScript. This structure allows developers to adapt the Maproom to country-specific datasets and requirements, reuse existing functionality, and add products that respond to the needs of different sectors and users.
 
 ![Countries and regions where ENACTS has been implemented or is being implemented](./img/Countries-and-regions-where-ENACTS-has-been-implemented-or-is-in-the-process-of-being.png)
+*Countries and regions where ENACTS has been implemented.*
 
 ## 1.2. Technical aspects of the new Maproom
 ### 1.2.1. Flask web application
@@ -40,26 +41,27 @@ flowchart LR
   subgraph data["Cache and data"]
     cache[("Filesystem cache")]
     users[("User SQLite database")]
-    enso[("ENSO SQLite database")]
+    enso[("ENSO - SQLite database")]
     datasets[("NetCDF and Zarr datasets")]
   end
 
   subgraph services["Maproom services"]
-    climate["Climate services<br/>Analysis, monitoring,<br/>forecasts and projections"]
-    sectors["Sector services<br/>Agriculture, Health, <br> Water and Disaster Risk Managment"]
-    structure["DRM and water<br/>Blueprint structure"]
+    climate["Climate services:<br/>Analysis, monitoring,<br/>forecasts and projections"]
+    sectors["Sector services:<br/>Climate and Agriculture, <br/> Climate and Health, <br/> Climate and Water <br/> and Disaster Risk Managment"]
   end
 
   user --> app
   app <-->|"accounts"| users
   app -->|"requests"| climate
   app -->|"requests"| sectors
-  app -.->|"registered"| structure
   cache <-->|"results"| climate
   cache <-->|"results"| sectors
-  enso -->|"indices"| climate
+  enso -->|"teleconnection"| climate
+  enso -->|"teleconnection"| sectors
   datasets -->|"input data"| climate
   datasets -->|"input data"| sectors
+  climate -->|"climate services"| sectors
+
 
   classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
   classDef toneAmber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
@@ -225,113 +227,167 @@ For example, the monthly climate analysis page is identified by:
 
 The generic page-rendering and data-request sequence is shown below:
 
-
 ```mermaid
 ---
 config:
   theme: base
-  htmlLabels: false
-  markdownAutoWrap: true
+  look: classic
   themeVariables:
     fontFamily: Arial, sans-serif
     fontSize: 12px
     lineColor: "#64748b"
+    primaryTextColor: "#1e293b"
   flowchart:
     htmlLabels: false
-    useMaxWidth: false
-    wrappingWidth: 860
-    nodeSpacing: 10
-    rankSpacing: 10
-    diagramPadding: 14
-    curve: linear
+    useMaxWidth: true
+    nodeSpacing: 30
+    rankSpacing: 45
+    curve: basis
+    diagramPadding: 20
 ---
 
-flowchart LR
-  subgraph sequence["Page rendering sequence"]
-    direction TB
-    url["Product URL"] --> route["render_template_page()"]
-    route --> yaml["load_maproom_page_text()"]
-    yaml --> template["_render_maproom_template()"]
-    template --> html["Jinja layout and controls"]
-    html --> js["Page JavaScript"]
-    js --> query["Build a JSON request"]
-    query --> endpoint["Flask data endpoint"]
-    endpoint --> calculation["Component scripts and shared data helpers"]
-    calculation --> response["JSON response"]
-    response --> render["Leaflet or Plotly"]
-  end
+flowchart TB
 
-  subgraph explanations["Interaction explanations"]
-    direction TB
+    subgraph INIT["01 · PAGE INITIALIZATION — FLASK / JINJA"]
+        direction LR
 
-    note_user["`**The user selects a Maproom page**
-    app/templates/navigation.html
-    app/scripts/maproom_items.py`"]
+        A["PAGE SELECTION
+        User selects a Maproom URL
 
-    note_flask["`**Flask loads the page and its configuration**
-    app/__init__.py
-    render_template_page()
-    app/scripts/maproom_items.py
-    load_maproom_page_text()`"]
+        app/templates/navigation.html
+        app/scripts/maproom_items.py"]
 
-    note_js["`**JavaScript initializes the map, charts, and controls**
-    app/climate/analysis/static/js/monthly.js`"]
+        B["FLASK PAGE ROUTING
+        Identify requested page
 
-    note_endpoint["`**A Flask endpoint receives a request and calls Python**
-    app/climate/analysis/index.py`"]
+        app/__init__.py
+        render_template_page()"]
 
-    note_data["`**Python reads source data or reuses cached results**
-    app/dst_api/scripts/
-    app/scripts/_cache.py`"]
+        C["PAGE CONFIGURATION
+        Load page text and settings
 
-    note_render["`**The browser renders the returned map or chart values**
-    app/static/js/leaflet-map.js
-    app/static/js/plotly-preview.js
-    app/static/js/plotly-expand.js`"]
+        app/scripts/maproom_items.py
+        load_maproom_page_text()"]
 
-    note_user ~~~ note_flask
-    note_flask ~~~ note_js
-    note_js ~~~ note_endpoint
-    note_endpoint ~~~ note_data
-    note_data ~~~ note_render
-  end
+        D["TEMPLATE RENDERING
+        Generate server-side HTML
 
-  sequence ~~~ explanations
+        _render_maproom_template()
+        Jinja templates"]
 
-  %% Stage colors and rounded corners
-  classDef entry fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e,stroke-width:2px,rx:10,ry:10;
-  classDef flask fill:#ede9fe,stroke:#7c3aed,color:#4c1d95,stroke-width:2px,rx:10,ry:10;
-  classDef browser fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:2px,rx:10,ry:10;
-  classDef request fill:#ffedd5,stroke:#ea580c,color:#7c2d12,stroke-width:2px,rx:10,ry:10;
-  classDef data fill:#fef3c7,stroke:#d97706,color:#78350f,stroke-width:2px,rx:10,ry:10;
-  classDef output fill:#ccfbf1,stroke:#0d9488,color:#134e4a,stroke-width:2px,rx:10,ry:10;
+        A --> B --> C --> D
+    end
 
-  %% Match each explanation to its corresponding stages
-  class url,note_user entry;
-  class route,yaml,template,note_flask flask;
-  class html,js,query,note_js browser;
-  class endpoint,note_endpoint request;
-  class calculation,note_data data;
-  class response,render,note_render output;
+    subgraph CLIENT["02 · BROWSER INITIALIZATION — JAVASCRIPT"]
+        direction LR
 
-  %% Column backgrounds
-  style sequence fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px,rx:14,ry:14
-  style explanations fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px,rx:14,ry:14
+        E["HTML AND CONTROLS
+        Display page and inputs
 
-  %% Style the original sequence arrows
-  linkStyle 0,1,2,3,4,5,6,7,8,9 stroke:#64748b,stroke-width:2px;
+        Jinja-generated HTML"]
+
+        F["JAVASCRIPT INITIALIZATION
+        Initialize interactive controls
+
+        app/climate/analysis/
+        static/js/monthly.js"]
+
+        G["BUILD DATA REQUEST
+        Collect parameters and
+        construct request payload
+
+        monthly.js"]
+
+        E --> F --> G
+    end
+
+    subgraph BACKEND["03 · DATA PROCESSING — FLASK API / PYTHON"]
+        direction LR
+
+        H["FLASK DATA ENDPOINT
+        Receive request and dispatch
+
+        app/climate/analysis/
+        index.py"]
+
+        I["CLIMATE CALCULATIONS
+        Retrieve and process data
+
+        app/dst_api/scripts/
+        Component Python functions"]
+
+        J[("DATA ACCESS AND CACHE
+        Climate datasets
+        Reusable cached results
+
+        app/scripts/_cache.py")]
+
+        H --> I
+        I <--> J
+    end
+
+    subgraph OUTPUT["04 · RESPONSE AND VISUALIZATION"]
+        direction LR
+
+        K["JSON RESPONSE
+        Return calculated results
+
+        Flask endpoint
+        app/climate/analysis/index.py"]
+
+        L["MAP RENDERING
+        Update geographic layers
+
+        app/static/js/
+        leaflet-map.js"]
+
+        M["CHART RENDERING
+        Update interactive charts
+
+        app/static/js/
+        plotly-preview.js
+        plotly-expand.js"]
+
+        K --> L
+        K --> M
+    end
+
+    D -->|"HTML response"| E
+    G -->|"HTTP data request"| H
+    I -->|"Calculated results"| K
+
+    classDef user fill:#dbeafe,stroke:#2563eb,color:#1e40af,stroke-width:1.5px;
+    classDef server fill:#ede9fe,stroke:#7c3aed,color:#4c1d95,stroke-width:1.4px;
+    classDef browser fill:#dcfce7,stroke:#16a34a,color:#166534,stroke-width:1.4px;
+    classDef api fill:#ffedd5,stroke:#ea580c,color:#9a3412,stroke-width:1.4px;
+    classDef data fill:#fef3c7,stroke:#d97706,color:#92400e,stroke-width:1.4px;
+    classDef output fill:#ccfbf1,stroke:#0d9488,color:#115e59,stroke-width:1.4px;
+
+    class A user;
+    class B,C,D server;
+    class E,F,G browser;
+    class H,I api;
+    class J data;
+    class K,L,M output;
+
+    style INIT fill:#f8fafc,stroke:#cbd5e1,stroke-width:1.2px
+    style CLIENT fill:#f8fafc,stroke:#cbd5e1,stroke-width:1.2px
+    style BACKEND fill:#f8fafc,stroke:#cbd5e1,stroke-width:1.2px
+    style OUTPUT fill:#f8fafc,stroke:#cbd5e1,stroke-width:1.2px
+
 ```
+
 
 The principal functions in this sequence are:
 
 | Function | Location | Responsibility |
 |---|---|---|
-| render_template_page() | app/__init__.py | Assemble the navigation and page context, then request template rendering |
-| load_maproom_page_text() | app/scripts/maproom_items.py | Combine shared and page-specific YAML settings |
-| parse_lang_yaml_nested() | app/scripts/maproom_items.py | Select language-specific values from configuration dictionaries |
-| __render_maproom_template() | app/__init__.py | Locate the page template, incorporate the local block-js.html where applicable, and render the result |
-| data_info_coverage() | app/scripts/maproom_items.py | Prepare dataset coverage and resolution information for the interface |
-| cache_data_functions() | app/scripts/_cache.py | Reuse a cached calculation result or calculate and store a new result |
+| *render_template_page()* | *app/\__init__.py* | Assemble the navigation and page context, then request template rendering |
+| *load_maproom_page_text()* | *app/scripts/maproom_items.py* | Combine shared and page-specific YAML settings |
+|*parse_lang_yaml_nested()* | *app/scripts/maproom_items.py* | Select language-specific values from configuration dictionaries |
+| *__render_maproom_template()** | *app/\__init__.py* | Locate the page template, incorporate the local *block-js.html* where applicable, and render the result |
+| *data_info_coverage()** | *app/scripts/maproom_items.py* | Prepare dataset coverage and resolution information for the interface |
+| *cache_data_functions()** | *app/scripts/_cache.py* | Reuse a cached calculation result or calculate and store a new result |
 
 
 On the monthly analysis page, JavaScript functions such as *createLeafletTileLayer(), setOffCanvasMapControl(), and displayClimateAnalysisMap()* initialize the map and its controls.
