@@ -17,10 +17,7 @@ Welcome to the Maprooms developer documentation
 
 # Maprooms Developer Documentation
 
-Build, configure, and maintain climate information services.
-
-A practical guide to working with the Python-based Maprooms application,
-from your first installation to developing and maintaining modules.
+This guide helps developers understand and maintain the Python-based Maprooms application. It explains how the code is organized and how to make changes and adding new features or component.
 
 [Get started](1-overview.md){ .md-button .md-button--primary }
 [Explore the guide](2-outline.md){ .md-button }
